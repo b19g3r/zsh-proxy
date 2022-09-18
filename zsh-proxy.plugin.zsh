@@ -12,9 +12,13 @@
 # Sukka (https://skk.moe)
 
 __read_proxy_config() {
+	WSL_HOST_IP=$(cat /etc/resolv.conf |grep -oP '(?<=nameserver\ ).*')
+	WSL_HOST_PROXY_PORT=7890
+	WSL_HOST_PROXY_SOCKS5="socks5://${WSL_HOST_IP}:${WSL_HOST_PROXY_PORT}"
+	WSL_HOST_PROXY_http="http://${WSL_HOST_IP}:${WSL_HOST_PROXY_PORT}"
 	__ZSHPROXY_STATUS=$(cat "${ZDOTDIR:-${HOME}}/.zsh-proxy/status")
-	__ZSHPROXY_SOCKS5=$(cat "${ZDOTDIR:-${HOME}}/.zsh-proxy/socks5")
-	__ZSHPROXY_HTTP=$(cat "${ZDOTDIR:-${HOME}}/.zsh-proxy/http")
+	__ZSHPROXY_SOCKS5=${WSL_HOST_PROXY_SOCKS5}
+	__ZSHPROXY_HTTP=${WSL_HOST_PROXY_http}
 	__ZSHPROXY_NO_PROXY=$(cat "${ZDOTDIR:-${HOME}}/.zsh-proxy/no_proxy")
 	__ZSHPROXY_GIT_PROXY_TYPE=$(cat "${ZDOTDIR:-${HOME}}/.zsh-proxy/git_proxy_type")
 }
